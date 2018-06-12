@@ -17,7 +17,7 @@ import websocket
 from requests.exceptions import ConnectionError
 
 
-version = "0.4.0"
+version = "0.4.1"
 __version__ = version
 __all__ = ['Chromote', 'ChromeTab']
 
@@ -136,9 +136,10 @@ class Chromote(object):
 
     def add_tab(self, url=None):
         tab = requests.get(self.url + '/json/new').json()
+        ctab = ChromeTab(tab['id'], tab['title'], tab['url'], tab['webSocketDebuggerUrl'])
         if url is not None:
-            ChromeTab(tab['id'], tab['title'], tab['url'], tab['webSocketDebuggerUrl']).set_url(url)
-            tab = requests.get(self.url + '/json').json()[0]
+            ctab.set_url(url)
+        return ctab
 
         return ChromeTab(tab['id'], tab['title'], tab['url'], tab['webSocketDebuggerUrl'])
 
